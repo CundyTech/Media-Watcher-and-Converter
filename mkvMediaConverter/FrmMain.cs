@@ -41,7 +41,7 @@ namespace mkvMediaConverter
         private void BtnSlctWtchFldr_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
-            DialogResult result = fbd.ShowDialog();
+            fbd.ShowDialog();
 
             if (!string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
@@ -105,6 +105,7 @@ namespace mkvMediaConverter
         /// <param name="path"></param>
         private void Watch(string path)
         {
+            if (path == null) throw new ArgumentNullException("path");
             if (_isWatching)//If already Watching
             {
                 _isWatching = false;
@@ -151,16 +152,16 @@ namespace mkvMediaConverter
         private void OnChanged(object source, FileSystemEventArgs e)
         {
             LogFile(e);
-            ChangeDetected(source, e);
+            ChangeDetected(e);
         }
 
         private readonly List<byte[]> _bytelist = new List<byte[]>();//Byte sig of already processed files
+
         /// <summary>
         /// Processes changes to watch folder
         /// </summary>
-        /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ChangeDetected(object sender, FileSystemEventArgs e)
+        private void ChangeDetected(FileSystemEventArgs e)
         {
             if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Changed)
             {
@@ -175,6 +176,7 @@ namespace mkvMediaConverter
                         if (file.EndsWith(".mkv"))//if file is a .mkv
                         {
                             FileInfo info = new FileInfo(file);
+                          
                             while (IsFileLocked(info))//Make sure file is finished being copied/moved
                             {
                                 Thread.Sleep(500);
@@ -215,9 +217,9 @@ namespace mkvMediaConverter
                             //Recursively look into other folders and repeat
                             var eventArgs = new FileSystemEventArgs(
                                 WatcherChangeTypes.Created,
-                                Path.GetDirectoryName(file),
+                                Path.GetDirectoryName(file), 
                                 Path.GetFileName(file));
-                            ChangeDetected(sender, eventArgs);
+                            ChangeDetected(eventArgs);
                         }
                     }
                 }
@@ -360,8 +362,7 @@ namespace mkvMediaConverter
             }
             catch (Exception)
             {
-
-                throw;
+                // ignored
             }
         }
 
