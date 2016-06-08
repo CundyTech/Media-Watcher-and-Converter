@@ -176,7 +176,7 @@ namespace mkvMediaConverter
                         if (file.EndsWith(".mkv"))//if file is a .mkv
                         {
                             FileInfo info = new FileInfo(file);
-                          
+
                             while (IsFileLocked(info))//Make sure file is finished being copied/moved
                             {
                                 Thread.Sleep(500);
@@ -217,7 +217,7 @@ namespace mkvMediaConverter
                             //Recursively look into other folders and repeat
                             var eventArgs = new FileSystemEventArgs(
                                 WatcherChangeTypes.Created,
-                                Path.GetDirectoryName(file), 
+                                Path.GetDirectoryName(file),
                                 Path.GetFileName(file));
                             ChangeDetected(eventArgs);
                         }
@@ -291,7 +291,13 @@ namespace mkvMediaConverter
         /// <param name="e"></param>
         private void BtnWatch_Click(object sender, EventArgs e)
         {
-            Watch(_path);
+            if (TxtWtchFldr.Text != null)
+            {
+                _path = TxtWtchFldr.Text;
+                Watch(_path);
+
+            }
+
         }
 
         /// <summary>
