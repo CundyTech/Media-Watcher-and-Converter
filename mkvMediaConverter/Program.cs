@@ -13,7 +13,7 @@ namespace mkvMediaConverter
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new BtnClear());
+            Application.Run(new FrmMain());
         }
     }
 }

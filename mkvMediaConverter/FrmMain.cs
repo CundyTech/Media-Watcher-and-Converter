@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -11,7 +13,7 @@ using mkvMediaConverter.Properties;
 
 namespace mkvMediaConverter
 {
-    public partial class BtnClear : Form
+    public partial class FrmMain : Form
     {
         /// <References>
         /// Watcher example borrowed from:
@@ -22,34 +24,23 @@ namespace mkvMediaConverter
 
         private bool _isWatching;
         private string _path;
+        private string _CustomTargetPath;
         private FileSystemWatcher _watcher = new FileSystemWatcher();
         private readonly StringBuilder _sb;
         private bool _isBusy;
 
-        public BtnClear()
+        #region Public Methods
+
+        public FrmMain()
         {
             InitializeComponent();
             _sb = new StringBuilder();
             _isBusy = false;
         }
 
-        /// <summary>
-        /// Gets Watch Folder
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnSlctWtchFldr_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.ShowDialog();
+        #endregion
 
-            if (!string.IsNullOrWhiteSpace(fbd.SelectedPath))
-            {
-                _path = fbd.SelectedPath;
-                TxtWtchFldr.Text = fbd.SelectedPath;
-            }
-        }
-
+        #region Private Methods
         /// <summary>
         /// Converts MKV to MP4
         /// </summary>
@@ -57,31 +48,39 @@ namespace mkvMediaConverter
         /// <param name="outfile"></param>
         private void ConvertToMp4(string infile, string outfile)
         {
-            var strWatchPath = TxtWtchFldr.Text;//Folder being watched
-            var strFfmpegLocation = Directory.GetCurrentDirectory();//Folder of FFMEG exe file
-
-            //Copy FFMPEG exe to root directory
-            if (!File.Exists(strWatchPath + @"\ffmpeg.exe"))
-            {
-                File.Copy(strFfmpegLocation + @"\ffmpeg.exe", strWatchPath + @"\ffmpeg.exe");
-            }
-
-            //Setup FFMPEG with params etc
-            Process proc = new Process();
-            ProcessStartInfo psi = new ProcessStartInfo();
-
-            psi.FileName = strWatchPath + @"\ffmpeg.exe";
-            psi.Arguments = @" -i " + @"""" + infile + @"""" + " -y -vcodec copy -acodec copy " + @" """ + outfile + @""" ";
-
-            // var text = psi.Arguments.ToString();
-            proc.StartInfo = psi;
-            proc.Start();
-            proc.WaitForExit();
+            string strFileName = Path.GetFileName(infile);
+            UpdateStatusStrip(SystemStatus.Converting, strFileName);
 
             try
             {
-                //Remove FFMPEG exe after conversion complete
-                File.Delete(_path + @"\ffmpeg.exe");
+                //Setup FFMPEG with params etc
+                Process process = new Process();
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+
+                startInfo.CreateNoWindow = true;
+                startInfo.UseShellExecute = false;
+                startInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ffmpeg\\ffmpeg.exe");
+                startInfo.Arguments = @" -i " + @"""" + infile + @"""" + " -y -vcodec copy -acodec copy " + @" """ + outfile + @""" ";
+
+
+                startInfo.CreateNoWindow = true;
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardError = true;
+                startInfo.RedirectStandardOutput = true;
+
+
+                process.StartInfo = startInfo;
+                process.ErrorDataReceived += ConsoleDataReceived;
+                process.OutputDataReceived += ConsoleDataReceived;
+
+                process.Start();
+
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+
+                process.WaitForExit();
+
+
                 if (ChkDeleteMkv.Checked)//Delete original mkv?
                 {
                     File.Delete(infile);
@@ -97,6 +96,23 @@ namespace mkvMediaConverter
                     LstOutput.EndUpdate();
                 }));
             }
+
+            UpdateStatusStrip(SystemStatus.FinishedConverting, strFileName);
+            UpdateConvertedFilesLog(strFileName);
+        }
+
+        private void UpdateConvertedFilesLog(string strFileName)
+        {
+            StringBuilder _sbBuilder = new StringBuilder();
+            _sbBuilder.Append(strFileName);
+            _sbBuilder.Append("    ");
+            _sbBuilder.Append(DateTime.Now);
+            LbConvertedFiles.BeginInvoke((Action)(() =>
+            {
+                LbConvertedFiles.BeginUpdate();
+                LbConvertedFiles.Items.Add(_sbBuilder);
+                LbConvertedFiles.EndUpdate();
+            }));
         }
 
         /// <summary>
@@ -105,9 +121,13 @@ namespace mkvMediaConverter
         /// <param name="path"></param>
         private void Watch(string path)
         {
+
             if (path == null) throw new ArgumentNullException("path");
             if (_isWatching)//If already Watching
             {
+                //Timer();
+                UpdateStatusStrip(SystemStatus.Stopped);
+
                 _isWatching = false;
                 _watcher.EnableRaisingEvents = false;//Stop Watcher
                 _watcher.Dispose();
@@ -116,8 +136,11 @@ namespace mkvMediaConverter
             }
             else
             {
+                //Timer();
                 if (TxtWtchFldr.Text != "")//If not Watching and watch folder exists
                 {
+                    UpdateStatusStrip(SystemStatus.Started);
+
                     path = TxtWtchFldr.Text;//Folder to watch
                     _isWatching = true;
                     BtnWatch.BackColor = Color.Red;
@@ -138,98 +161,102 @@ namespace mkvMediaConverter
                     _watcher.Changed += OnChanged;
                     _watcher.Created += OnChanged;
                     _watcher.Deleted += OnChanged;
+                    _watcher.Renamed += _watcher_Renamed;
 
                     _watcher.EnableRaisingEvents = true; //Start Watcher
                 }
             }
         }
 
-        /// <summary>
-        /// Event fires when change detected
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="e"></param>
-        private void OnChanged(object source, FileSystemEventArgs e)
+        bool _isRunning;
+        Stopwatch stopwatch = null;
+        private void Timer()
         {
-            LogFile(e);
-            ChangeDetected(e);
-        }
 
-        private readonly List<byte[]> _bytelist = new List<byte[]>();//Byte sig of already processed files
-
-        /// <summary>
-        /// Processes changes to watch folder
-        /// </summary>
-        /// <param name="e"></param>
-        private void ChangeDetected(FileSystemEventArgs e)
-        {
-            if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Changed)
+            if (_isRunning == false)
             {
-                //If file is folder
-                if (Directory.Exists(e.FullPath))
+                _isRunning = true;
+                stopwatch = Stopwatch.StartNew();
+                stopwatch.Start();
+                // Capture the elapsed ticks and write them to the console.
+
+                while (_isRunning == true)
                 {
-                    //Get files from folder
-                    foreach (string file in Directory.GetFiles(e.FullPath))
+                    long ticks1 = stopwatch.ElapsedTicks;
+                    statusStrip.BeginInvoke((Action)(() =>
                     {
-
-                        string outputfile = file.Replace(".mkv", ".MP4");//prepare output file/location for conversion
-                        if (file.EndsWith(".mkv"))//if file is a .mkv
-                        {
-                            FileInfo info = new FileInfo(file);
-
-                            while (IsFileLocked(info))//Make sure file is finished being copied/moved
-                            {
-                                Thread.Sleep(500);
-                            }
-
-                            //Get byte sig of file and if seen before dont process
-                            byte[] myFileData = File.ReadAllBytes(file);
-                            byte[] myHash = MD5.Create().ComputeHash(myFileData);
-
-                            if (_bytelist.Count != 0)
-                            {
-                                foreach (var item in _bytelist)
-                                {
-                                    //If seen before ignore
-                                    if (myHash == item)
-                                    {
-                                        return;
-                                    }
-                                }
-                            }
-                            else//Else add to list
-                            {
-                                _bytelist.Add(myHash);
-                            }
-
-                            //If convert to MP4 option checked
-                            if (RbtnMKVtoMP4.Checked)
-                            {
-                                ConvertToMp4(file, outputfile);
-                            }
-                            else
-                            {
-                                //Not Imeplented
-                            }
-                        }
-                        else
-                        {
-                            //Recursively look into other folders and repeat
-                            var eventArgs = new FileSystemEventArgs(
-                                WatcherChangeTypes.Created,
-                                Path.GetDirectoryName(file),
-                                Path.GetFileName(file));
-                            ChangeDetected(eventArgs);
-                        }
-                    }
+                        toolStripStatusLabel2.Text = String.Format("Uptime {0}", ticks1);
+                        statusStrip.Refresh();
+                        statusStrip.Update();
+                    }));
                 }
             }
             else
             {
-                //Not a create or change so just log
-                LogFile(e);
+                stopwatch.Stop();
+                _isRunning = false;
+
             }
         }
+
+        private DateTime startTime = DateTime.Now;
+
+       
+
+        /// <summary>
+        /// The different statuses the system ca be.
+        /// </summary>
+        enum SystemStatus
+        {
+            Started,
+            Stopped,
+            Converting,
+            FinishedConverting
+
+        };
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="name"></param>
+        private void UpdateStatusStrip(SystemStatus status, string name = null)
+        {
+            string strStatusText = "";
+            switch (status)
+            {
+                case SystemStatus.Started:
+                    {
+                        strStatusText = "Watching Media";
+                        break;
+                    }
+                case SystemStatus.Converting:
+                    {
+                        strStatusText = string.Format("Converting {0}", name);
+                        break;
+                    }
+                case SystemStatus.FinishedConverting:
+                    {
+                        strStatusText = string.Format("Finished Converting {0}", name);
+                        break;
+                    }
+
+                case SystemStatus.Stopped:
+                    {
+                        strStatusText = string.Format("Stopped Watching Media");
+                        break;
+                    }
+            }
+
+
+            statusStrip.BeginInvoke((Action)(() =>
+            {
+                toolStripStatusLabel.Text = String.Format("{0}", strStatusText);
+                statusStrip.Refresh();
+                statusStrip.Update();
+            }));
+        }
+
 
         /// <summary>
         /// Log any changes
@@ -237,20 +264,40 @@ namespace mkvMediaConverter
         /// <param name="e"></param>
         private void LogFile(FileSystemEventArgs e)
         {
-            if (e.FullPath.EndsWith(".mkv") || e.FullPath.EndsWith(".MP4"))
+
+            if (_isBusy == false)
             {
-                if (_isBusy == false)
-                {
-                    _sb.Remove(0, _sb.Length);
-                    _sb.Append(e.FullPath);
-                    _sb.Append(" ");
-                    _sb.Append(e.ChangeType);
-                    _sb.Append("    ");
-                    _sb.Append(DateTime.Now);
-                    _isBusy = true;
-                }
+                _sb.Remove(0, _sb.Length);
+                _sb.Append(e.FullPath);
+                _sb.Append(" ");
+                _sb.Append(e.ChangeType);
+                _sb.Append("    ");
+                _sb.Append(DateTime.Now);
+                _isBusy = true;
             }
         }
+
+        /// <summary>
+        /// Logs any rename events
+        /// </summary>
+        /// <param name="e"></param>
+        private void LogFile(RenamedEventArgs e)
+        {
+
+            if (_isBusy == false)
+            {
+                _sb.Remove(0, _sb.Length);
+                _sb.Append(e.OldName);
+                _sb.Append(" -> ");
+                _sb.Append(e.FullPath);
+                _sb.Append(" ");
+                _sb.Append(e.ChangeType);
+                _sb.Append(" ");
+                _sb.Append(DateTime.Now);
+                _isBusy = true;
+            }
+        }
+
 
         /// <summary>
         /// Checks if file is locked by another process
@@ -284,6 +331,147 @@ namespace mkvMediaConverter
             return false;
         }
 
+        #endregion
+
+        #region Form Methods
+
+        private readonly List<byte[]> _bytelist = new List<byte[]>();//Byte sig of already processed files
+        private string _outputExtension = null;
+        private string _outputFile = null;
+
+
+        /// <summary>
+        /// Processes changes to watch folder
+        /// </summary>
+        /// <param name="e"></param>
+        private void ChangeDetected(FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Changed)
+            {
+                //If file is folder
+                if (Directory.Exists(e.FullPath))
+                {
+                    //Get files from folder
+                    foreach (string file in Directory.GetFiles(e.FullPath))
+                    {
+                        if (RbtnMKVtoMP4.Checked)
+                        {
+                            _outputExtension = ".MP4";
+                        }
+
+
+                        if (!ChkCustomOutput.Checked)
+                        {
+                            _outputFile = file.Replace(".mkv", _outputExtension);
+                        }
+                        else
+                        {
+                            string strFileName = Path.GetFileName(file);
+                            _CustomTargetPath = TxtOutput.Text;
+                            if (strFileName != null)
+                            {
+                                strFileName = strFileName.Replace(".mkv", _outputExtension);
+                                _outputFile = Path.Combine(_CustomTargetPath, strFileName);
+                            }
+                        }
+
+                        if (file.EndsWith(".mkv"))//if file is a .mkv
+                        {
+                            FileInfo info = new FileInfo(file);
+
+                            while (IsFileLocked(info))//Make sure file is finished being copied/moved
+                            {
+                                Thread.Sleep(500);
+                            }
+
+                            //Get byte sig of file and if seen before dont process
+                            byte[] myFileData = File.ReadAllBytes(file);
+                            byte[] myHash = MD5.Create().ComputeHash(myFileData);
+
+                            if (_bytelist.Count != 0)
+                            {
+                                foreach (var item in _bytelist)
+                                {
+                                    //If seen before ignore
+                                    if (myHash == item)
+                                    {
+                                        return;
+                                    }
+                                }
+                            }
+                            else//Else add to list
+                            {
+                                _bytelist.Add(myHash);
+                            }
+
+                            //If convert to MP4 option checked
+                            if (RbtnMKVtoMP4.Checked)
+                            {
+                                ConvertToMp4(file, _outputFile);
+                            }
+                            else
+                            {
+                                //Not Imeplented
+                            }
+                        }
+                        else
+                        {
+                            //Recursively look into other folders and repeat
+                            var eventArgs = new FileSystemEventArgs(
+                                WatcherChangeTypes.Created,
+                                Path.GetDirectoryName(file),
+                                Path.GetFileName(file));
+                            ChangeDetected(eventArgs);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //Not a create or change so just log
+                LogFile(e);
+            }
+        }
+
+        /// <summary>
+        /// Receives SOUT data from FFMPEG and updates log
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ConsoleDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (e.Data != null)
+                LstFfmpegOutput.BeginInvoke((Action)(() =>
+                {
+                    LstFfmpegOutput.BeginUpdate();
+                    if (e.Data != null) LstFfmpegOutput.Items.Add(e.Data);
+                    LstFfmpegOutput.EndUpdate();
+                }));
+        }
+
+        /// <summary>
+        /// Event for when an object is renamed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void _watcher_Renamed(object sender, RenamedEventArgs e)
+        {
+            LogFile(e);
+            ChangeDetected(e);
+        }
+
+        /// <summary>
+        /// Event fires when change detected
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
+        private void OnChanged(object source, FileSystemEventArgs e)
+        {
+            LogFile(e);
+            ChangeDetected(e);
+        }
+
+
         /// <summary>
         /// Begin/Stop Watching
         /// </summary>
@@ -293,11 +481,10 @@ namespace mkvMediaConverter
         {
             if (TxtWtchFldr.Text != null)
             {
+
                 _path = TxtWtchFldr.Text;
                 Watch(_path);
-
             }
-
         }
 
         /// <summary>
@@ -314,6 +501,14 @@ namespace mkvMediaConverter
                 LstOutput.EndUpdate();
                 _isBusy = false;
             }
+
+            //uptime calc
+            //StringBuilder _sbBuilder = new StringBuilder();
+            //var delta = DateTime.Now - startTime;
+            //string seconds = delta.Seconds.ToString("n0");
+            //string minutes = Math.Floor(delta.TotalMinutes).ToString("n0");
+            //_sbBuilder.AppendFormat("{0}:{1}", minutes, seconds);
+
         }
 
         /// <summary>
@@ -356,20 +551,6 @@ namespace mkvMediaConverter
             Settings.Default.ChkDeleteMkv = ChkDeleteMkv.Checked;
             Settings.Default.TxtWtchFldr = TxtWtchFldr.Text;
             Settings.Default.Save();
-
-            //Clean up if File remains
-            try
-            {
-                if (File.Exists(_path + @"\ffmpeg.exe"))
-                {
-                    File.Delete(_path + @"\ffmpeg.exe");
-
-                }
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
         }
 
         /// <summary>
@@ -381,6 +562,40 @@ namespace mkvMediaConverter
         {
             LstOutput.Items.Clear();
         }
+
+        /// <summary>
+        /// Gets Watch Folder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnSlctWtchFldr_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.ShowDialog();
+
+            if (!string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                _path = fbd.SelectedPath;
+                TxtWtchFldr.Text = fbd.SelectedPath;
+            }
+        }
+
+
+        #endregion
+
+        private void BtnSlctCstmFldr_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.ShowDialog();
+
+            if (!string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                _CustomTargetPath = fbd.SelectedPath;
+                TxtOutput.Text = fbd.SelectedPath;
+            }
+        }
+
+
 
     }
 }
