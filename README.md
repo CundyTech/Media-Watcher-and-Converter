@@ -18,5 +18,16 @@ Known Bugs.
 1.The MKV is converted twice, once when the file download is finished and then again. The cause for the second conversion is currently unknown.
 Notes.
 
+Change Log 11/06/2016
+
+1. Tweaked/improved the ususge of FFMPEG.
+2. Diverted SOUT of console to log tab.
+3. Added log tab of converted files.
+4. Added a system status.
+5. Improved code layout
+
+
+
+
 
 If anyone want to colaborate on this project, please feel free to contribute. I've used a free to use and distribute license, and do not intend to sell or profit from this project, now or in the future.
