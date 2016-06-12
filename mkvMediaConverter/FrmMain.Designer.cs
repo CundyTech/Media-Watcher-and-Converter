@@ -63,6 +63,7 @@ namespace mkvMediaConverter
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.tabControl1.SuspendLayout();
             this.TpageConvert.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -83,6 +84,7 @@ namespace mkvMediaConverter
             // 
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
             this.tabControl1.Controls.Add(this.TpageConvert);
             this.tabControl1.Controls.Add(this.TPageOptions);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -103,10 +105,10 @@ namespace mkvMediaConverter
             this.TpageConvert.Controls.Add(this.TxtWtchFldr);
             this.TpageConvert.Controls.Add(this.TxtOutput);
             this.TpageConvert.ForeColor = System.Drawing.Color.Black;
-            this.TpageConvert.Location = new System.Drawing.Point(4, 22);
+            this.TpageConvert.Location = new System.Drawing.Point(4, 25);
             this.TpageConvert.Name = "TpageConvert";
             this.TpageConvert.Padding = new System.Windows.Forms.Padding(3);
-            this.TpageConvert.Size = new System.Drawing.Size(702, 136);
+            this.TpageConvert.Size = new System.Drawing.Size(702, 133);
             this.TpageConvert.TabIndex = 0;
             this.TpageConvert.Text = "Convert";
             // 
@@ -223,10 +225,10 @@ namespace mkvMediaConverter
             // 
             this.TPageOptions.BackColor = System.Drawing.Color.Transparent;
             this.TPageOptions.Controls.Add(this.ChkDeleteMkv);
-            this.TPageOptions.Location = new System.Drawing.Point(4, 22);
+            this.TPageOptions.Location = new System.Drawing.Point(4, 25);
             this.TPageOptions.Name = "TPageOptions";
             this.TPageOptions.Padding = new System.Windows.Forms.Padding(3);
-            this.TPageOptions.Size = new System.Drawing.Size(702, 136);
+            this.TPageOptions.Size = new System.Drawing.Size(702, 133);
             this.TPageOptions.TabIndex = 1;
             this.TPageOptions.Text = "Options";
             // 
@@ -373,8 +375,8 @@ namespace mkvMediaConverter
             // 
             this.toolStripStatusLabel.BackColor = System.Drawing.Color.Transparent;
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
-            this.toolStripStatusLabel.Text = "Status";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(26, 17);
+            this.toolStripStatusLabel.Text = "Idle";
             // 
             // toolStripStatusLabel1
             // 
@@ -395,6 +397,13 @@ namespace mkvMediaConverter
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toolStripStatusLabel2.Visible = false;
             // 
+            // notifyIcon
+            // 
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "mkv Media Converter";
+            this.notifyIcon.Visible = true;
+            this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -409,6 +418,7 @@ namespace mkvMediaConverter
             this.Text = "mkv Media Converter";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Resize += new System.EventHandler(this.FrmMain_Resize);
             this.tabControl1.ResumeLayout(false);
             this.TpageConvert.ResumeLayout(false);
             this.TpageConvert.PerformLayout();
@@ -459,6 +469,7 @@ namespace mkvMediaConverter
         private ToolStripStatusLabel toolStripStatusLabel1;
         private ToolStripStatusLabel toolStripStatusLabel2;
         private Timer timer1;
+        private NotifyIcon notifyIcon;
     }
 }
 
