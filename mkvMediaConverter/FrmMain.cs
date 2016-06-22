@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -24,7 +21,7 @@ namespace mkvMediaConverter
 
         private bool _isWatching;
         private string _path;
-        private string _CustomTargetPath;
+        private string _customTargetPath;
         private FileSystemWatcher _watcher = new FileSystemWatcher();
         private readonly StringBuilder _sb;
         private bool _isBusy;
@@ -81,7 +78,7 @@ namespace mkvMediaConverter
                 process.WaitForExit();
 
 
-                if (ChkDeleteMkv.Checked)//Delete original mkv?
+                if (deleteOldFileToolStripMenuItem.Checked)//Delete original mkv?
                 {
                     File.Delete(infile);
                 }
@@ -103,14 +100,14 @@ namespace mkvMediaConverter
 
         private void UpdateConvertedFilesLog(string strFileName)
         {
-            StringBuilder _sbBuilder = new StringBuilder();
-            _sbBuilder.Append(strFileName);
-            _sbBuilder.Append("    ");
-            _sbBuilder.Append(DateTime.Now);
+            StringBuilder sbBuilder = new StringBuilder();
+            sbBuilder.Append(strFileName);
+            sbBuilder.Append("    ");
+            sbBuilder.Append(DateTime.Now);
             LbConvertedFiles.BeginInvoke((Action)(() =>
             {
                 LbConvertedFiles.BeginUpdate();
-                LbConvertedFiles.Items.Add(_sbBuilder);
+                LbConvertedFiles.Items.Add(sbBuilder);
                 LbConvertedFiles.EndUpdate();
             }));
         }
@@ -131,8 +128,9 @@ namespace mkvMediaConverter
                 _isWatching = false;
                 _watcher.EnableRaisingEvents = false;//Stop Watcher
                 _watcher.Dispose();
-                BtnWatch.BackColor = Color.ForestGreen;
+                //BtnWatch.BackColor = Color.ForestGreen;
                 BtnWatch.Text = @"Start";
+                BtnWatch.Image = Resources.ServiceStart_5723;
             }
             else
             {
@@ -140,10 +138,10 @@ namespace mkvMediaConverter
                 if (TxtWtchFldr.Text != "")//If not Watching and watch folder exists
                 {
                     UpdateStatusStrip(SystemStatus.Started);
-
+                    BtnWatch.Image = Resources.ServicesStop_5725;
                     path = TxtWtchFldr.Text;//Folder to watch
                     _isWatching = true;
-                    BtnWatch.BackColor = Color.Red;
+                    //BtnWatch.BackColor = Color.Red;
                     BtnWatch.Text = @"Stop";
 
                     _watcher = new FileSystemWatcher();
@@ -168,42 +166,8 @@ namespace mkvMediaConverter
             }
         }
 
-        bool _isRunning;
-        Stopwatch stopwatch = null;
-        private void Timer()
-        {
-
-            if (_isRunning == false)
-            {
-                _isRunning = true;
-                stopwatch = Stopwatch.StartNew();
-                stopwatch.Start();
-                // Capture the elapsed ticks and write them to the console.
-
-                while (_isRunning == true)
-                {
-                    long ticks1 = stopwatch.ElapsedTicks;
-                    statusStrip.BeginInvoke((Action)(() =>
-                    {
-                        toolStripStatusLabel2.Text = String.Format("Uptime {0}", ticks1);
-                        statusStrip.Refresh();
-                        statusStrip.Update();
-                    }));
-                }
-            }
-            else
-            {
-                stopwatch.Stop();
-                _isRunning = false;
-
-            }
-        }
-
-        private DateTime startTime = DateTime.Now;
-
        
-
-        /// <summary>
+      /// <summary>
         /// The different statuses the system ca be.
         /// </summary>
         enum SystemStatus
@@ -336,8 +300,8 @@ namespace mkvMediaConverter
         #region Form Methods
 
         private readonly List<byte[]> _bytelist = new List<byte[]>();//Byte sig of already processed files
-        private string _outputExtension = null;
-        private string _outputFile = null;
+        private string _outputExtension;
+        private string _outputFile;
 
 
         /// <summary>
@@ -367,11 +331,11 @@ namespace mkvMediaConverter
                         else
                         {
                             string strFileName = Path.GetFileName(file);
-                            _CustomTargetPath = TxtOutput.Text;
+                            _customTargetPath = TxtOutput.Text;
                             if (strFileName != null)
                             {
                                 strFileName = strFileName.Replace(".mkv", _outputExtension);
-                                _outputFile = Path.Combine(_CustomTargetPath, strFileName);
+                                _outputFile = Path.Combine(_customTargetPath, strFileName);
                             }
                         }
 
@@ -484,9 +448,12 @@ namespace mkvMediaConverter
 
                 _path = TxtWtchFldr.Text;
                 Watch(_path);
+                _tsTimeSpan = DateTime.Now;
+
             }
         }
 
+        private DateTime _tsTimeSpan;
         /// <summary>
         /// Check if there are updates pending to be logged
         /// </summary>
@@ -502,13 +469,20 @@ namespace mkvMediaConverter
                 _isBusy = false;
             }
 
-            //uptime calc
-            //StringBuilder _sbBuilder = new StringBuilder();
-            //var delta = DateTime.Now - startTime;
-            //string seconds = delta.Seconds.ToString("n0");
-            //string minutes = Math.Floor(delta.TotalMinutes).ToString("n0");
-            //_sbBuilder.AppendFormat("{0}:{1}", minutes, seconds);
+            if (BtnWatch.Text == @"Stop")
+            {
+                   //uptime calc
+            statusStrip.BeginInvoke((Action)(() =>
+            {
+                TimeSpan span = (DateTime.Now - _tsTimeSpan);
+                toolStripStatusLabel2.Text = String.Format("{0} Days, {1} Hours, {2} Minutes, {3} Seconds",
+                    span.Days, span.Hours, span.Minutes, span.Seconds);
+                statusStrip.Refresh();
+                statusStrip.Update();
+            })); 
 
+            }
+        
         }
 
         /// <summary>
@@ -536,9 +510,9 @@ namespace mkvMediaConverter
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
-            BtnWatch.BackColor = Color.ForestGreen;
+            //BtnWatch.BackColor = Color.ForestGreen;
             TxtWtchFldr.Text = Settings.Default.TxtWtchFldr;
-            ChkDeleteMkv.Checked = Settings.Default.ChkDeleteMkv;
+            deleteOldFileToolStripMenuItem.Checked = Settings.Default.ChkDeleteMkv;
         }
 
         /// <summary>
@@ -548,7 +522,7 @@ namespace mkvMediaConverter
         /// <param name="e"></param>
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Settings.Default.ChkDeleteMkv = ChkDeleteMkv.Checked;
+            Settings.Default.ChkDeleteMkv = deleteOldFileToolStripMenuItem.Checked;
             Settings.Default.TxtWtchFldr = TxtWtchFldr.Text;
             Settings.Default.Save();
         }
@@ -571,6 +545,7 @@ namespace mkvMediaConverter
         private void BtnSlctWtchFldr_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.Description = @"Select folder that will be watched for new file of select format.";
             fbd.ShowDialog();
 
             if (!string.IsNullOrWhiteSpace(fbd.SelectedPath))
@@ -586,24 +561,26 @@ namespace mkvMediaConverter
         private void BtnSlctCstmFldr_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.Description = @"Select folder when converted files will be created.";
+            fbd.SelectedPath = TxtWtchFldr.Text;
             fbd.ShowDialog();
 
             if (!string.IsNullOrWhiteSpace(fbd.SelectedPath))
             {
-                _CustomTargetPath = fbd.SelectedPath;
+                _customTargetPath = fbd.SelectedPath;
                 TxtOutput.Text = fbd.SelectedPath;
             }
         }
 
         private void FrmMain_Resize(object sender, EventArgs e)
         {
-            if (FormWindowState.Minimized == this.WindowState)
+            if (FormWindowState.Minimized == WindowState)
             {
                 notifyIcon.Visible = true;
-               this.Hide();
+                Hide();
             }
 
-            else if (FormWindowState.Normal == this.WindowState)
+            else if (FormWindowState.Normal == WindowState)
             {
                 notifyIcon.Visible = false;
             }
@@ -611,11 +588,19 @@ namespace mkvMediaConverter
 
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
+            Show();
+            WindowState = FormWindowState.Normal;
         }
 
+     
+        private void deleteOldFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            deleteOldFileToolStripMenuItem.Checked = deleteOldFileToolStripMenuItem.Checked != true;
+        }
 
-
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Dispose();
+        }
     }
 }

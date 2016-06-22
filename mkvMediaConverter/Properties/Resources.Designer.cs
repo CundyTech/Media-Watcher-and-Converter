@@ -12,6 +12,7 @@ using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Globalization;
 using System.Resources;
 using System.Runtime.CompilerServices;
@@ -62,6 +63,46 @@ namespace mkvMediaConverter.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static Bitmap Counter_5730 {
+            get {
+                object obj = ResourceManager.GetObject("Counter_5730", resourceCulture);
+                return ((Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static Bitmap Orange {
+            get {
+                object obj = ResourceManager.GetObject("Orange", resourceCulture);
+                return ((Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static Bitmap ServicesStop_5725 {
+            get {
+                object obj = ResourceManager.GetObject("ServicesStop_5725", resourceCulture);
+                return ((Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static Bitmap ServiceStart_5723 {
+            get {
+                object obj = ResourceManager.GetObject("ServiceStart_5723", resourceCulture);
+                return ((Bitmap)(obj));
             }
         }
     }

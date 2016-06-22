@@ -34,20 +34,6 @@ namespace mkvMediaConverter
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.TpageConvert = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.RbtnMP4toMKV = new System.Windows.Forms.RadioButton();
-            this.RbtnMKVtoMP4 = new System.Windows.Forms.RadioButton();
-            this.BtnWatch = new System.Windows.Forms.Button();
-            this.BtnSlctCstmFldr = new System.Windows.Forms.Button();
-            this.ChkCustomOutput = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.BtnSlctWtchFldr = new System.Windows.Forms.Button();
-            this.TxtWtchFldr = new System.Windows.Forms.TextBox();
-            this.TxtOutput = new System.Windows.Forms.TextBox();
-            this.TPageOptions = new System.Windows.Forms.TabPage();
-            this.ChkDeleteMkv = new System.Windows.Forms.CheckBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.LbConvertedFiles = new System.Windows.Forms.ListBox();
@@ -64,185 +50,39 @@ namespace mkvMediaConverter
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.tabControl1.SuspendLayout();
-            this.TpageConvert.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.TPageOptions.SuspendLayout();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.postConverstionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteOldFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.RbtnMP4toMKV = new System.Windows.Forms.RadioButton();
+            this.RbtnMKVtoMP4 = new System.Windows.Forms.RadioButton();
+            this.BtnWatch = new System.Windows.Forms.Button();
+            this.BtnSlctCstmFldr = new System.Windows.Forms.Button();
+            this.ChkCustomOutput = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.BtnSlctWtchFldr = new System.Windows.Forms.Button();
+            this.TxtWtchFldr = new System.Windows.Forms.TextBox();
+            this.TxtOutput = new System.Windows.Forms.TextBox();
             this.tabControl2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.statusStrip.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer
             // 
             this.timer.Enabled = true;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabControl1.Controls.Add(this.TpageConvert);
-            this.tabControl1.Controls.Add(this.TPageOptions);
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(710, 162);
-            this.tabControl1.TabIndex = 30;
-            // 
-            // TpageConvert
-            // 
-            this.TpageConvert.BackColor = System.Drawing.Color.Transparent;
-            this.TpageConvert.Controls.Add(this.groupBox3);
-            this.TpageConvert.Controls.Add(this.BtnWatch);
-            this.TpageConvert.Controls.Add(this.BtnSlctCstmFldr);
-            this.TpageConvert.Controls.Add(this.ChkCustomOutput);
-            this.TpageConvert.Controls.Add(this.label5);
-            this.TpageConvert.Controls.Add(this.BtnSlctWtchFldr);
-            this.TpageConvert.Controls.Add(this.TxtWtchFldr);
-            this.TpageConvert.Controls.Add(this.TxtOutput);
-            this.TpageConvert.ForeColor = System.Drawing.Color.Black;
-            this.TpageConvert.Location = new System.Drawing.Point(4, 25);
-            this.TpageConvert.Name = "TpageConvert";
-            this.TpageConvert.Padding = new System.Windows.Forms.Padding(3);
-            this.TpageConvert.Size = new System.Drawing.Size(702, 133);
-            this.TpageConvert.TabIndex = 0;
-            this.TpageConvert.Text = "Convert";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.BackColor = System.Drawing.Color.Transparent;
-            this.groupBox3.Controls.Add(this.RbtnMP4toMKV);
-            this.groupBox3.Controls.Add(this.RbtnMKVtoMP4);
-            this.groupBox3.Location = new System.Drawing.Point(6, 91);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(603, 28);
-            this.groupBox3.TabIndex = 43;
-            this.groupBox3.TabStop = false;
-            // 
-            // RbtnMP4toMKV
-            // 
-            this.RbtnMP4toMKV.AutoSize = true;
-            this.RbtnMP4toMKV.Location = new System.Drawing.Point(94, 9);
-            this.RbtnMP4toMKV.Name = "RbtnMP4toMKV";
-            this.RbtnMP4toMKV.Size = new System.Drawing.Size(85, 17);
-            this.RbtnMP4toMKV.TabIndex = 1;
-            this.RbtnMP4toMKV.Text = "MP4 to MKV";
-            this.RbtnMP4toMKV.UseVisualStyleBackColor = true;
-            this.RbtnMP4toMKV.Visible = false;
-            // 
-            // RbtnMKVtoMP4
-            // 
-            this.RbtnMKVtoMP4.AutoSize = true;
-            this.RbtnMKVtoMP4.Checked = true;
-            this.RbtnMKVtoMP4.Location = new System.Drawing.Point(6, 9);
-            this.RbtnMKVtoMP4.Name = "RbtnMKVtoMP4";
-            this.RbtnMKVtoMP4.Size = new System.Drawing.Size(85, 17);
-            this.RbtnMKVtoMP4.TabIndex = 0;
-            this.RbtnMKVtoMP4.TabStop = true;
-            this.RbtnMKVtoMP4.Text = "MKV to MP4";
-            this.RbtnMKVtoMP4.UseVisualStyleBackColor = true;
-            // 
-            // BtnWatch
-            // 
-            this.BtnWatch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnWatch.Location = new System.Drawing.Point(617, 97);
-            this.BtnWatch.Name = "BtnWatch";
-            this.BtnWatch.Size = new System.Drawing.Size(75, 23);
-            this.BtnWatch.TabIndex = 42;
-            this.BtnWatch.Text = "Watch";
-            this.BtnWatch.UseVisualStyleBackColor = true;
-            this.BtnWatch.Click += new System.EventHandler(this.BtnWatch_Click);
-            // 
-            // BtnSlctCstmFldr
-            // 
-            this.BtnSlctCstmFldr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnSlctCstmFldr.Location = new System.Drawing.Point(617, 64);
-            this.BtnSlctCstmFldr.Name = "BtnSlctCstmFldr";
-            this.BtnSlctCstmFldr.Size = new System.Drawing.Size(75, 23);
-            this.BtnSlctCstmFldr.TabIndex = 41;
-            this.BtnSlctCstmFldr.Text = "Select";
-            this.BtnSlctCstmFldr.UseVisualStyleBackColor = true;
-            this.BtnSlctCstmFldr.Click += new System.EventHandler(this.BtnSlctCstmFldr_Click);
-            // 
-            // ChkCustomOutput
-            // 
-            this.ChkCustomOutput.AutoSize = true;
-            this.ChkCustomOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ChkCustomOutput.Location = new System.Drawing.Point(6, 48);
-            this.ChkCustomOutput.Name = "ChkCustomOutput";
-            this.ChkCustomOutput.Size = new System.Drawing.Size(128, 17);
-            this.ChkCustomOutput.TabIndex = 40;
-            this.ChkCustomOutput.Text = "Custom Output Folder";
-            this.ChkCustomOutput.UseVisualStyleBackColor = true;
-            this.ChkCustomOutput.CheckedChanged += new System.EventHandler(this.ChkCustomOutput_CheckedChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 6);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(74, 13);
-            this.label5.TabIndex = 30;
-            this.label5.Text = "Watch Folder:";
-            // 
-            // BtnSlctWtchFldr
-            // 
-            this.BtnSlctWtchFldr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnSlctWtchFldr.Location = new System.Drawing.Point(617, 22);
-            this.BtnSlctWtchFldr.Name = "BtnSlctWtchFldr";
-            this.BtnSlctWtchFldr.Size = new System.Drawing.Size(75, 23);
-            this.BtnSlctWtchFldr.TabIndex = 36;
-            this.BtnSlctWtchFldr.Text = "Select";
-            this.BtnSlctWtchFldr.UseVisualStyleBackColor = true;
-            this.BtnSlctWtchFldr.Click += new System.EventHandler(this.BtnSlctWtchFldr_Click);
-            // 
-            // TxtWtchFldr
-            // 
-            this.TxtWtchFldr.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TxtWtchFldr.Location = new System.Drawing.Point(6, 23);
-            this.TxtWtchFldr.Name = "TxtWtchFldr";
-            this.TxtWtchFldr.Size = new System.Drawing.Size(603, 20);
-            this.TxtWtchFldr.TabIndex = 32;
-            // 
-            // TxtOutput
-            // 
-            this.TxtOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TxtOutput.Enabled = false;
-            this.TxtOutput.Location = new System.Drawing.Point(6, 66);
-            this.TxtOutput.Name = "TxtOutput";
-            this.TxtOutput.Size = new System.Drawing.Size(603, 20);
-            this.TxtOutput.TabIndex = 33;
-            // 
-            // TPageOptions
-            // 
-            this.TPageOptions.BackColor = System.Drawing.Color.Transparent;
-            this.TPageOptions.Controls.Add(this.ChkDeleteMkv);
-            this.TPageOptions.Location = new System.Drawing.Point(4, 25);
-            this.TPageOptions.Name = "TPageOptions";
-            this.TPageOptions.Padding = new System.Windows.Forms.Padding(3);
-            this.TPageOptions.Size = new System.Drawing.Size(702, 133);
-            this.TPageOptions.TabIndex = 1;
-            this.TPageOptions.Text = "Options";
-            // 
-            // ChkDeleteMkv
-            // 
-            this.ChkDeleteMkv.AutoSize = true;
-            this.ChkDeleteMkv.Checked = global::mkvMediaConverter.Properties.Settings.Default.ChkDeleteMkv;
-            this.ChkDeleteMkv.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::mkvMediaConverter.Properties.Settings.Default, "ChkDeleteMkv", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.ChkDeleteMkv.Location = new System.Drawing.Point(18, 18);
-            this.ChkDeleteMkv.Name = "ChkDeleteMkv";
-            this.ChkDeleteMkv.Size = new System.Drawing.Size(119, 17);
-            this.ChkDeleteMkv.TabIndex = 0;
-            this.ChkDeleteMkv.Text = "Delete original .mkv";
-            this.ChkDeleteMkv.UseVisualStyleBackColor = true;
             // 
             // tabControl2
             // 
@@ -383,19 +223,18 @@ namespace mkvMediaConverter
             this.toolStripStatusLabel1.BackColor = System.Drawing.Color.Transparent;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(657, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(449, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.BackColor = System.Drawing.Color.Transparent;
+            this.toolStripStatusLabel2.Image = global::mkvMediaConverter.Properties.Resources.Counter_5730;
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(91, 17);
-            this.toolStripStatusLabel2.Text = "Uptime 00:00:00";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(221, 17);
+            this.toolStripStatusLabel2.Text = "0 Days, 0 Hours, 0 Minutes, 0 Seconds";
             this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.toolStripStatusLabel2.Visible = false;
             // 
             // notifyIcon
             // 
@@ -404,34 +243,223 @@ namespace mkvMediaConverter
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.menuStrip1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(711, 27);
+            this.panel1.TabIndex = 56;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.optionsToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(711, 24);
+            this.menuStrip1.TabIndex = 0;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(37, 20);
+            this.toolStripMenuItem1.Text = "File";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.postConverstionToolStripMenuItem});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // postConverstionToolStripMenuItem
+            // 
+            this.postConverstionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteOldFileToolStripMenuItem});
+            this.postConverstionToolStripMenuItem.Name = "postConverstionToolStripMenuItem";
+            this.postConverstionToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.postConverstionToolStripMenuItem.Text = "Post-Converstion";
+            // 
+            // deleteOldFileToolStripMenuItem
+            // 
+            this.deleteOldFileToolStripMenuItem.Checked = true;
+            this.deleteOldFileToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.deleteOldFileToolStripMenuItem.Name = "deleteOldFileToolStripMenuItem";
+            this.deleteOldFileToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.deleteOldFileToolStripMenuItem.Text = "Delete Old File";
+            this.deleteOldFileToolStripMenuItem.Click += new System.EventHandler(this.deleteOldFileToolStripMenuItem_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.groupBox3);
+            this.panel2.Controls.Add(this.BtnWatch);
+            this.panel2.Controls.Add(this.BtnSlctCstmFldr);
+            this.panel2.Controls.Add(this.ChkCustomOutput);
+            this.panel2.Controls.Add(this.label5);
+            this.panel2.Controls.Add(this.BtnSlctWtchFldr);
+            this.panel2.Controls.Add(this.TxtWtchFldr);
+            this.panel2.Controls.Add(this.TxtOutput);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 27);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(711, 136);
+            this.panel2.TabIndex = 57;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox3.Controls.Add(this.RbtnMP4toMKV);
+            this.groupBox3.Controls.Add(this.RbtnMKVtoMP4);
+            this.groupBox3.Location = new System.Drawing.Point(15, 88);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(603, 28);
+            this.groupBox3.TabIndex = 51;
+            this.groupBox3.TabStop = false;
+            // 
+            // RbtnMP4toMKV
+            // 
+            this.RbtnMP4toMKV.AutoSize = true;
+            this.RbtnMP4toMKV.Location = new System.Drawing.Point(94, 9);
+            this.RbtnMP4toMKV.Name = "RbtnMP4toMKV";
+            this.RbtnMP4toMKV.Size = new System.Drawing.Size(85, 17);
+            this.RbtnMP4toMKV.TabIndex = 1;
+            this.RbtnMP4toMKV.Text = "MP4 to MKV";
+            this.RbtnMP4toMKV.UseVisualStyleBackColor = true;
+            this.RbtnMP4toMKV.Visible = false;
+            // 
+            // RbtnMKVtoMP4
+            // 
+            this.RbtnMKVtoMP4.AutoSize = true;
+            this.RbtnMKVtoMP4.Checked = true;
+            this.RbtnMKVtoMP4.Location = new System.Drawing.Point(6, 9);
+            this.RbtnMKVtoMP4.Name = "RbtnMKVtoMP4";
+            this.RbtnMKVtoMP4.Size = new System.Drawing.Size(85, 17);
+            this.RbtnMKVtoMP4.TabIndex = 0;
+            this.RbtnMKVtoMP4.TabStop = true;
+            this.RbtnMKVtoMP4.Text = "MKV to MP4";
+            this.RbtnMKVtoMP4.UseVisualStyleBackColor = true;
+            // 
+            // BtnWatch
+            // 
+            this.BtnWatch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnWatch.Image = global::mkvMediaConverter.Properties.Resources.ServiceStart_5723;
+            this.BtnWatch.Location = new System.Drawing.Point(626, 94);
+            this.BtnWatch.Name = "BtnWatch";
+            this.BtnWatch.Size = new System.Drawing.Size(75, 23);
+            this.BtnWatch.TabIndex = 50;
+            this.BtnWatch.Text = "Start";
+            this.BtnWatch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.BtnWatch.UseVisualStyleBackColor = true;
+            this.BtnWatch.Click += new System.EventHandler(this.BtnWatch_Click);
+            // 
+            // BtnSlctCstmFldr
+            // 
+            this.BtnSlctCstmFldr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnSlctCstmFldr.Location = new System.Drawing.Point(626, 61);
+            this.BtnSlctCstmFldr.Name = "BtnSlctCstmFldr";
+            this.BtnSlctCstmFldr.Size = new System.Drawing.Size(75, 23);
+            this.BtnSlctCstmFldr.TabIndex = 49;
+            this.BtnSlctCstmFldr.Text = "Select";
+            this.BtnSlctCstmFldr.UseVisualStyleBackColor = true;
+            this.BtnSlctCstmFldr.Click += new System.EventHandler(this.BtnSlctCstmFldr_Click);
+            // 
+            // ChkCustomOutput
+            // 
+            this.ChkCustomOutput.AutoSize = true;
+            this.ChkCustomOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ChkCustomOutput.Location = new System.Drawing.Point(15, 45);
+            this.ChkCustomOutput.Name = "ChkCustomOutput";
+            this.ChkCustomOutput.Size = new System.Drawing.Size(128, 17);
+            this.ChkCustomOutput.TabIndex = 48;
+            this.ChkCustomOutput.Text = "Custom Output Folder";
+            this.ChkCustomOutput.UseVisualStyleBackColor = true;
+            this.ChkCustomOutput.CheckedChanged += new System.EventHandler(this.ChkCustomOutput_CheckedChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 3);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(74, 13);
+            this.label5.TabIndex = 44;
+            this.label5.Text = "Watch Folder:";
+            // 
+            // BtnSlctWtchFldr
+            // 
+            this.BtnSlctWtchFldr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnSlctWtchFldr.Location = new System.Drawing.Point(626, 19);
+            this.BtnSlctWtchFldr.Name = "BtnSlctWtchFldr";
+            this.BtnSlctWtchFldr.Size = new System.Drawing.Size(75, 23);
+            this.BtnSlctWtchFldr.TabIndex = 47;
+            this.BtnSlctWtchFldr.Text = "Select";
+            this.BtnSlctWtchFldr.UseVisualStyleBackColor = true;
+            this.BtnSlctWtchFldr.Click += new System.EventHandler(this.BtnSlctWtchFldr_Click);
+            // 
+            // TxtWtchFldr
+            // 
+            this.TxtWtchFldr.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TxtWtchFldr.Location = new System.Drawing.Point(15, 20);
+            this.TxtWtchFldr.Name = "TxtWtchFldr";
+            this.TxtWtchFldr.Size = new System.Drawing.Size(603, 20);
+            this.TxtWtchFldr.TabIndex = 45;
+            // 
+            // TxtOutput
+            // 
+            this.TxtOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TxtOutput.Enabled = false;
+            this.TxtOutput.Location = new System.Drawing.Point(15, 63);
+            this.TxtOutput.Name = "TxtOutput";
+            this.TxtOutput.Size = new System.Drawing.Size(603, 20);
+            this.TxtOutput.TabIndex = 46;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightGray;
             this.ClientSize = new System.Drawing.Size(711, 473);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.tabControl2);
-            this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMain";
             this.Text = "mkv Media Converter";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.FrmMain_Resize);
-            this.tabControl1.ResumeLayout(false);
-            this.TpageConvert.ResumeLayout(false);
-            this.TpageConvert.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.TPageOptions.ResumeLayout(false);
-            this.TPageOptions.PerformLayout();
             this.tabControl2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -440,20 +468,6 @@ namespace mkvMediaConverter
         #endregion
 
         private Timer timer;
-        private TabControl tabControl1;
-        private TabPage TpageConvert;
-        private Button BtnSlctCstmFldr;
-        private CheckBox ChkCustomOutput;
-        private Label label5;
-        private Button BtnSlctWtchFldr;
-        private TextBox TxtWtchFldr;
-        private TextBox TxtOutput;
-        private TabPage TPageOptions;
-        private CheckBox ChkDeleteMkv;
-        private GroupBox groupBox3;
-        private RadioButton RbtnMP4toMKV;
-        private RadioButton RbtnMKVtoMP4;
-        private Button BtnWatch;
         private TabControl tabControl2;
         private TabPage tabPage1;
         private TabPage tabPage2;
@@ -470,6 +484,24 @@ namespace mkvMediaConverter
         private ToolStripStatusLabel toolStripStatusLabel2;
         private Timer timer1;
         private NotifyIcon notifyIcon;
+        private Panel panel1;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem optionsToolStripMenuItem;
+        private ToolStripMenuItem postConverstionToolStripMenuItem;
+        private ToolStripMenuItem deleteOldFileToolStripMenuItem;
+        private Panel panel2;
+        private GroupBox groupBox3;
+        private RadioButton RbtnMP4toMKV;
+        private RadioButton RbtnMKVtoMP4;
+        private Button BtnWatch;
+        private Button BtnSlctCstmFldr;
+        private CheckBox ChkCustomOutput;
+        private Label label5;
+        private Button BtnSlctWtchFldr;
+        private TextBox TxtWtchFldr;
+        private TextBox TxtOutput;
     }
 }
 

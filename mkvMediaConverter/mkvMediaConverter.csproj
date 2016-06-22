@@ -157,6 +157,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="MKonVerter.png.ico" />
+    <None Include="Resources\Orange.png" />
+    <None Include="Resources\ServicesStop_5725.ico" />
+    <None Include="Resources\ServiceStart_5723.ico" />
+    <None Include="Resources\Counter_5730.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
